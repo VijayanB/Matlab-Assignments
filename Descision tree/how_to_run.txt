@@ -1,0 +1,2 @@
+1) import all files
+2)execute descisionTree
