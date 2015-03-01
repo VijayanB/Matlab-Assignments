@@ -6,15 +6,19 @@ dataValues = B(1:size(B),1:size(B,2)) ;
 target = dataset2cell(B(1:size(B),4));
 feature = dataset2cell(B(1:size(B),1:3));
 d = size(B,2);
-w = rand(d-1,1);
-w = w';
-conv = 0;
-cw = []
-epoch = 100;
-lr = [1 0.01 0.1 0.5];
+xmin=-0.01;
+xmax=0.01;
+n=d-1;
+w=xmin+rand(1,n)*(xmax-xmin);
+
+cw = [];
+lr = [0.001 0.01 0.1 0.5];
 witer = [ ];
-error = [];
-for l = 1:size(lr,2)
+
+    for l = 1:size(lr,2)
+        epoch = 100;
+        conv = 0;
+        error = [];
 while (conv == 0 && epoch > 0)
     
     epoch = epoch - 1;
@@ -32,7 +36,7 @@ while (conv == 0 && epoch > 0)
            w = w + lr(1,l) * cw;
     end
     witer = [ witer w' ];
-    err = - err / 100 ;
+    err = - (err / 100) ;
     error = [ error err ];
     if st_w == w
        conv = 1;
@@ -41,14 +45,28 @@ while (conv == 0 && epoch > 0)
 
 end
     num = 1:100;
+     y = error(:);
     if xr == 1
       %  if l
         subplot(4,2,l),plot(num,error(:),'r-');
         
     hold on;
     else
-        subplot(4,2,l+4),plot(num,error(:),'b--')
+       
+        subplot(4,2,(l+4)   ),plot(num,y,'b--');
     end
 axis([0,100,min(error(:)),max(error(:))]);
-end
+indexmin = find(min(y) == y);
+xmin = num(indexmin);
+ymin = y(indexmin);
+strmin = ['Minimum = ',num2str(ymin)];
+text(xmin,ymin,strmin,'HorizontalAlignment','left');
+str1 = strcat('\leftarrow learning rate = ', num2str(lr(1,l)));
+text(10,y(indexmin-90),str1);
+len = strcat('y = ',x(xr,:));
+legend(len);
+xlabel('Iterations');
+ylabel('Error Function');
+    end
+hold off;
 end
