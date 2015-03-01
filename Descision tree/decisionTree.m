@@ -34,9 +34,30 @@ coordinates = get(gca,'Children');
 xCoordinates = get(coordinates(2) ,'XData');
 yCoordinates = get(coordinates(2) ,'YData');
 
+co_ordinates = [];
+
 for i=1:size(op,2)
-    s = strcat(op(i).class,'(',op(i).edge, ')');
-    text(xCoordinates(i)-0.03,yCoordinates(i)+0.03,s);
-    text(xCoordinates(i)-0.03,yCoordinates(i)+.03,s);
+   
+    
+    co_ordinates = [ co_ordinates ; xCoordinates(i) yCoordinates(i) ];
+    text(xCoordinates(i)-0.03,yCoordinates(i)+0.03,op(i).class);
+    text(xCoordinates(i)-0.03,yCoordinates(i)+.03,op(i).class);
 end
+
+for i=1:size(op,2)
+    parent = op(i).total;
+    if parent > 0 
+        x = (xCoordinates(i)-0.03 + co_ordinates(parent,1)) / 2.0;
+        y = (yCoordinates(i)-0.03 + co_ordinates(parent,2)) / 2.0;
+        if strcmp(op(i).edge,'value' ) == 1
+         temp = '';
+        else
+         temp = strcat('(',op(i).edge, ')');
+        end
+        text(x,y,temp);
+    end
+end
+
+
+
 %node = struct('attr','atr1','children',childrens);
