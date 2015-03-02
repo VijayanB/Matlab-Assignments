@@ -32,9 +32,10 @@ while (conv == 0 && epoch > 0)
            o = dot(ds,w);
            y = (1/(1+exp(-o)));
            err = err + r * log(y) + (1- r) * log(1 - y);
-           cw = cw + ((r - y) * ds );
+           cw =  ((r - y) * ds );
            w = w + lr(1,l) * cw;
     end
+    
     witer = [ witer w' ];
     err = - (err / 100) ;
     error = [ error err ];
